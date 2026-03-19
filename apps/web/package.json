@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@Flowcamp/backend": "workspace:*",
-    "@Flowcamp/env": "workspace:*",
     "@Flowcamp/ui": "workspace:*",
     "@convex-dev/better-auth": "catalog:",
     "@convex-dev/react-query": "^0.1.0",

@@ -33,7 +33,6 @@
     "check": "oxlint && oxfmt --write"
   },
   "dependencies": {
-    "@Flowcamp/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
