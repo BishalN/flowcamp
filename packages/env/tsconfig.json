@@ -1,0 +1,3 @@
+{
+  "extends": "@rflowcamp/config/tsconfig.base.json"
+}
