@@ -2,6 +2,7 @@ import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { env } from "@flowcamp/env/web";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ConvexReactClient } from "convex/react";
+import { Agentation } from "agentation";
 import ReactDOM from "react-dom/client";
 
 import { authClient } from "@/lib/auth-client";
@@ -38,5 +39,10 @@ if (!rootElement) {
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  root.render(<RouterProvider router={router} />);
+  root.render(
+    <>
+      <RouterProvider router={router} />
+      {import.meta.env.DEV && <Agentation />}
+    </>,
+  );
 }

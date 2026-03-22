@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JoinTokenRouteImport } from './routes/join.$token'
+import { Route as AuthedWorkspaceSetupRouteImport } from './routes/_authed.workspace-setup'
+import { Route as AuthedDashboardRouteImport } from './routes/_authed.dashboard'
+import { Route as AuthedProjectsIndexRouteImport } from './routes/_authed.projects.index'
+import { Route as AuthedProjectsProjectIdRouteImport } from './routes/_authed.projects.$projectId'
+import { Route as AuthedProjectsProjectIdIndexRouteImport } from './routes/_authed.projects.$projectId.index'
+import { Route as AuthedProjectsProjectIdToolRouteImport } from './routes/_authed.projects.$projectId.$tool'
 
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AuthedRoute = AuthedRouteImport.update({
+  id: '/_authed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,40 +28,121 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JoinTokenRoute = JoinTokenRouteImport.update({
+  id: '/join/$token',
+  path: '/join/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedWorkspaceSetupRoute = AuthedWorkspaceSetupRouteImport.update({
+  id: '/workspace-setup',
+  path: '/workspace-setup',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedProjectsIndexRoute = AuthedProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedProjectsProjectIdRoute = AuthedProjectsProjectIdRouteImport.update({
+  id: '/projects/$projectId',
+  path: '/projects/$projectId',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedProjectsProjectIdIndexRoute =
+  AuthedProjectsProjectIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthedProjectsProjectIdRoute,
+  } as any)
+const AuthedProjectsProjectIdToolRoute =
+  AuthedProjectsProjectIdToolRouteImport.update({
+    id: '/$tool',
+    path: '/$tool',
+    getParentRoute: () => AuthedProjectsProjectIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof AuthedDashboardRoute
+  '/workspace-setup': typeof AuthedWorkspaceSetupRoute
+  '/join/$token': typeof JoinTokenRoute
+  '/projects/$projectId': typeof AuthedProjectsProjectIdRouteWithChildren
+  '/projects/': typeof AuthedProjectsIndexRoute
+  '/projects/$projectId/$tool': typeof AuthedProjectsProjectIdToolRoute
+  '/projects/$projectId/': typeof AuthedProjectsProjectIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof AuthedDashboardRoute
+  '/workspace-setup': typeof AuthedWorkspaceSetupRoute
+  '/join/$token': typeof JoinTokenRoute
+  '/projects': typeof AuthedProjectsIndexRoute
+  '/projects/$projectId/$tool': typeof AuthedProjectsProjectIdToolRoute
+  '/projects/$projectId': typeof AuthedProjectsProjectIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/_authed': typeof AuthedRouteWithChildren
+  '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/_authed/workspace-setup': typeof AuthedWorkspaceSetupRoute
+  '/join/$token': typeof JoinTokenRoute
+  '/_authed/projects/$projectId': typeof AuthedProjectsProjectIdRouteWithChildren
+  '/_authed/projects/': typeof AuthedProjectsIndexRoute
+  '/_authed/projects/$projectId/$tool': typeof AuthedProjectsProjectIdToolRoute
+  '/_authed/projects/$projectId/': typeof AuthedProjectsProjectIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/workspace-setup'
+    | '/join/$token'
+    | '/projects/$projectId'
+    | '/projects/'
+    | '/projects/$projectId/$tool'
+    | '/projects/$projectId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard'
-  id: '__root__' | '/' | '/dashboard'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/workspace-setup'
+    | '/join/$token'
+    | '/projects'
+    | '/projects/$projectId/$tool'
+    | '/projects/$projectId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authed'
+    | '/_authed/dashboard'
+    | '/_authed/workspace-setup'
+    | '/join/$token'
+    | '/_authed/projects/$projectId'
+    | '/_authed/projects/'
+    | '/_authed/projects/$projectId/$tool'
+    | '/_authed/projects/$projectId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  AuthedRoute: typeof AuthedRouteWithChildren
+  JoinTokenRoute: typeof JoinTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -65,12 +152,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/join/$token': {
+      id: '/join/$token'
+      path: '/join/$token'
+      fullPath: '/join/$token'
+      preLoaderRoute: typeof JoinTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed/workspace-setup': {
+      id: '/_authed/workspace-setup'
+      path: '/workspace-setup'
+      fullPath: '/workspace-setup'
+      preLoaderRoute: typeof AuthedWorkspaceSetupRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/dashboard': {
+      id: '/_authed/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthedDashboardRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/projects/': {
+      id: '/_authed/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof AuthedProjectsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/projects/$projectId': {
+      id: '/_authed/projects/$projectId'
+      path: '/projects/$projectId'
+      fullPath: '/projects/$projectId'
+      preLoaderRoute: typeof AuthedProjectsProjectIdRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/projects/$projectId/': {
+      id: '/_authed/projects/$projectId/'
+      path: '/'
+      fullPath: '/projects/$projectId/'
+      preLoaderRoute: typeof AuthedProjectsProjectIdIndexRouteImport
+      parentRoute: typeof AuthedProjectsProjectIdRoute
+    }
+    '/_authed/projects/$projectId/$tool': {
+      id: '/_authed/projects/$projectId/$tool'
+      path: '/$tool'
+      fullPath: '/projects/$projectId/$tool'
+      preLoaderRoute: typeof AuthedProjectsProjectIdToolRouteImport
+      parentRoute: typeof AuthedProjectsProjectIdRoute
+    }
   }
 }
 
+interface AuthedProjectsProjectIdRouteChildren {
+  AuthedProjectsProjectIdToolRoute: typeof AuthedProjectsProjectIdToolRoute
+  AuthedProjectsProjectIdIndexRoute: typeof AuthedProjectsProjectIdIndexRoute
+}
+
+const AuthedProjectsProjectIdRouteChildren: AuthedProjectsProjectIdRouteChildren =
+  {
+    AuthedProjectsProjectIdToolRoute: AuthedProjectsProjectIdToolRoute,
+    AuthedProjectsProjectIdIndexRoute: AuthedProjectsProjectIdIndexRoute,
+  }
+
+const AuthedProjectsProjectIdRouteWithChildren =
+  AuthedProjectsProjectIdRoute._addFileChildren(
+    AuthedProjectsProjectIdRouteChildren,
+  )
+
+interface AuthedRouteChildren {
+  AuthedDashboardRoute: typeof AuthedDashboardRoute
+  AuthedWorkspaceSetupRoute: typeof AuthedWorkspaceSetupRoute
+  AuthedProjectsProjectIdRoute: typeof AuthedProjectsProjectIdRouteWithChildren
+  AuthedProjectsIndexRoute: typeof AuthedProjectsIndexRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedDashboardRoute: AuthedDashboardRoute,
+  AuthedWorkspaceSetupRoute: AuthedWorkspaceSetupRoute,
+  AuthedProjectsProjectIdRoute: AuthedProjectsProjectIdRouteWithChildren,
+  AuthedProjectsIndexRoute: AuthedProjectsIndexRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  AuthedRoute: AuthedRouteWithChildren,
+  JoinTokenRoute: JoinTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

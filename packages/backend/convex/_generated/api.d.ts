@@ -8,10 +8,16 @@
  * @module
  */
 
+import type * as appUser from "../appUser.js";
 import type * as auth from "../auth.js";
 import type * as healthCheck from "../healthCheck.js";
+import type * as home from "../home.js";
 import type * as http from "../http.js";
 import type * as privateData from "../privateData.js";
+import type * as projects from "../projects.js";
+import type * as users from "../users.js";
+import type * as workspaceInvites from "../workspaceInvites.js";
+import type * as workspaces from "../workspaces.js";
 
 import type {
   ApiFromModules,
@@ -20,10 +26,16 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  appUser: typeof appUser;
   auth: typeof auth;
   healthCheck: typeof healthCheck;
+  home: typeof home;
   http: typeof http;
   privateData: typeof privateData;
+  projects: typeof projects;
+  users: typeof users;
+  workspaceInvites: typeof workspaceInvites;
+  workspaces: typeof workspaces;
 }>;
 
 /**
