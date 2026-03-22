@@ -1,4 +1,4 @@
-import { cn } from "@rflowcamp/ui/lib/utils";
+import { cn } from "@flowcamp/ui/lib/utils";
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (

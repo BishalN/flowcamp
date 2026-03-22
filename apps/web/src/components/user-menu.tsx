@@ -1,5 +1,5 @@
-import { api } from "@rflowcamp/backend/convex/_generated/api";
-import { Button } from "@rflowcamp/ui/components/button";
+import { api } from "@flowcamp/backend/convex/_generated/api";
+import { Button } from "@flowcamp/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@rflowcamp/ui/components/dropdown-menu";
+} from "@flowcamp/ui/components/dropdown-menu";
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 

@@ -1,4 +1,4 @@
-import { Toaster } from "@rflowcamp/ui/components/sonner";
+import { Toaster } from "@flowcamp/ui/components/sonner";
 import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -14,11 +14,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "rflowcamp",
+        title: "flowcamp",
       },
       {
         name: "description",
-        content: "rflowcamp is a web application",
+        content: "flowcamp is a web application",
       },
     ],
     links: [

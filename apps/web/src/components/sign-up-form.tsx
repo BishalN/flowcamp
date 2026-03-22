@@ -1,6 +1,6 @@
-import { Button } from "@rflowcamp/ui/components/button";
-import { Input } from "@rflowcamp/ui/components/input";
-import { Label } from "@rflowcamp/ui/components/label";
+import { Button } from "@flowcamp/ui/components/button";
+import { Input } from "@flowcamp/ui/components/input";
+import { Label } from "@flowcamp/ui/components/label";
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";

@@ -1,12 +1,13 @@
 {
-  "name": "@rflowcamp/backend",
+  "name": "@flowcamp/backend",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "author": "",
   "scripts": {
     "dev": "convex dev",
-    "dev:setup": "convex dev --configure --until-success"
+    "dev:setup": "convex dev --configure --until-success",
+    "deploy": "convex deploy"
   },
   "dependencies": {
     "@convex-dev/better-auth": "catalog:",
@@ -16,7 +17,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@rflowcamp/config": "workspace:*",
+    "@flowcamp/config": "workspace:*",
     "@types/node": "^24.3.0",
     "typescript": "^5"
   }

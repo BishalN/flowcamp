@@ -1,11 +1,11 @@
 {
-  "extends": "@rflowcamp/config/tsconfig.base.json",
+  "extends": "@flowcamp/config/tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
-      "@rflowcamp/ui/*": ["./src/*"]
+      "@flowcamp/ui/*": ["./src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],

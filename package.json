@@ -1,5 +1,5 @@
 {
-  "name": "rflowcamp",
+  "name": "flowcamp",
   "private": true,
   "workspaces": {
     "packages": [
@@ -28,17 +28,17 @@
     "build": "turbo build",
     "check-types": "turbo check-types",
     "dev:web": "turbo -F web dev",
-    "dev:server": "turbo -F @rflowcamp/backend dev",
-    "dev:setup": "turbo -F @rflowcamp/backend dev:setup",
+    "dev:server": "turbo -F @flowcamp/backend dev",
+    "dev:setup": "turbo -F @flowcamp/backend dev:setup",
     "check": "oxlint && oxfmt --write"
   },
   "dependencies": {
-    "@rflowcamp/env": "workspace:*",
+    "@flowcamp/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@rflowcamp/config": "workspace:*",
+    "@flowcamp/config": "workspace:*",
     "oxfmt": "^0.26.0",
     "oxlint": "^1.41.0",
     "turbo": "^2.8.12",

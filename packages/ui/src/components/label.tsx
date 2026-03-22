@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@rflowcamp/ui/lib/utils";
+import { cn } from "@flowcamp/ui/lib/utils";
 
 function Label({ className, ...props }: React.ComponentProps<"label">) {
   return (

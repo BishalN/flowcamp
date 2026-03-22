@@ -3,14 +3,14 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "rflowcamp",
+      "name": "flowcamp",
       "dependencies": {
-        "@rflowcamp/env": "workspace:*",
+        "@flowcamp/env": "workspace:*",
         "dotenv": "catalog:",
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@rflowcamp/config": "workspace:*",
+        "@flowcamp/config": "workspace:*",
         "oxfmt": "^0.26.0",
         "oxlint": "^1.41.0",
         "turbo": "^2.8.12",
@@ -23,9 +23,9 @@
       "dependencies": {
         "@convex-dev/better-auth": "catalog:",
         "@hookform/resolvers": "^5.1.1",
-        "@rflowcamp/backend": "workspace:*",
-        "@rflowcamp/env": "workspace:*",
-        "@rflowcamp/ui": "workspace:*",
+        "@flowcamp/backend": "workspace:*",
+        "@flowcamp/env": "workspace:*",
+        "@flowcamp/ui": "workspace:*",
         "@tailwindcss/vite": "^4.1.18",
         "@tanstack/react-form": "^1.28.0",
         "@tanstack/react-router": "^1.141.1",
@@ -40,7 +40,7 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@rflowcamp/config": "workspace:*",
+        "@flowcamp/config": "workspace:*",
         "@tanstack/react-router-devtools": "^1.141.1",
         "@tanstack/router-plugin": "^1.141.1",
         "@types/node": "^22.13.14",
@@ -54,7 +54,7 @@
       },
     },
     "packages/backend": {
-      "name": "@rflowcamp/backend",
+      "name": "@flowcamp/backend",
       "version": "1.0.0",
       "dependencies": {
         "@convex-dev/better-auth": "catalog:",
@@ -64,17 +64,17 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@rflowcamp/config": "workspace:*",
+        "@flowcamp/config": "workspace:*",
         "@types/node": "^24.3.0",
         "typescript": "^5",
       },
     },
     "packages/config": {
-      "name": "@rflowcamp/config",
+      "name": "@flowcamp/config",
       "version": "0.0.0",
     },
     "packages/env": {
-      "name": "@rflowcamp/env",
+      "name": "@flowcamp/env",
       "version": "0.0.0",
       "dependencies": {
         "@t3-oss/env-core": "^0.13.1",
@@ -82,12 +82,12 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@rflowcamp/config": "workspace:*",
+        "@flowcamp/config": "workspace:*",
         "typescript": "^5",
       },
     },
     "packages/ui": {
-      "name": "@rflowcamp/ui",
+      "name": "@flowcamp/ui",
       "version": "0.0.0",
       "dependencies": {
         "@base-ui/react": "^1.3.0",
@@ -104,7 +104,7 @@
         "tw-animate-css": "^1.4.0",
       },
       "devDependencies": {
-        "@rflowcamp/config": "workspace:*",
+        "@flowcamp/config": "workspace:*",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "tailwindcss": "catalog:",
@@ -400,13 +400,13 @@
 
     "@peculiar/x509": ["@peculiar/x509@1.14.3", "", { "dependencies": { "@peculiar/asn1-cms": "^2.6.0", "@peculiar/asn1-csr": "^2.6.0", "@peculiar/asn1-ecc": "^2.6.0", "@peculiar/asn1-pkcs9": "^2.6.0", "@peculiar/asn1-rsa": "^2.6.0", "@peculiar/asn1-schema": "^2.6.0", "@peculiar/asn1-x509": "^2.6.0", "pvtsutils": "^1.3.6", "reflect-metadata": "^0.2.2", "tslib": "^2.8.1", "tsyringe": "^4.10.0" } }, "sha512-C2Xj8FZ0uHWeCXXqX5B4/gVFQmtSkiuOolzAgutjTfseNOHT3pUjljDZsTSxXFGgio54bCzVFqmEOUrIVk8RDA=="],
 
-    "@rflowcamp/backend": ["@rflowcamp/backend@workspace:packages/backend"],
+    "@flowcamp/backend": ["@flowcamp/backend@workspace:packages/backend"],
 
-    "@rflowcamp/config": ["@rflowcamp/config@workspace:packages/config"],
+    "@flowcamp/config": ["@flowcamp/config@workspace:packages/config"],
 
-    "@rflowcamp/env": ["@rflowcamp/env@workspace:packages/env"],
+    "@flowcamp/env": ["@flowcamp/env@workspace:packages/env"],
 
-    "@rflowcamp/ui": ["@rflowcamp/ui@workspace:packages/ui"],
+    "@flowcamp/ui": ["@flowcamp/ui@workspace:packages/ui"],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-beta.27", "", {}, "sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA=="],
 

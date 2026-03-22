@@ -13,11 +13,11 @@
   "iconLibrary": "lucide",
   "rtl": false,
   "aliases": {
-    "components": "@rflowcamp/ui/components",
-    "utils": "@rflowcamp/ui/lib/utils",
-    "ui": "@rflowcamp/ui/components",
-    "lib": "@rflowcamp/ui/lib",
-    "hooks": "@rflowcamp/ui/hooks"
+    "components": "@flowcamp/ui/components",
+    "utils": "@flowcamp/ui/lib/utils",
+    "ui": "@flowcamp/ui/components",
+    "lib": "@flowcamp/ui/lib",
+    "hooks": "@flowcamp/ui/hooks"
   },
   "menuColor": "default-translucent",
   "menuAccent": "subtle",

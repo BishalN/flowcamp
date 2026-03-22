@@ -1,10 +1,10 @@
-import { Button } from "@rflowcamp/ui/components/button";
+import { Button } from "@flowcamp/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@rflowcamp/ui/components/dropdown-menu";
+} from "@flowcamp/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 
 import { useTheme } from "@/components/theme-provider";

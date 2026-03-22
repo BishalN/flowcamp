@@ -13,8 +13,8 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "utils": "@rflowcamp/ui/lib/utils",
-    "ui": "@rflowcamp/ui/components",
+    "utils": "@flowcamp/ui/lib/utils",
+    "ui": "@flowcamp/ui/components",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },

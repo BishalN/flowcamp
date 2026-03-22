@@ -1,5 +1,5 @@
 {
-  "name": "@rflowcamp/env",
+  "name": "@flowcamp/env",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@rflowcamp/config": "workspace:*",
+    "@flowcamp/config": "workspace:*",
     "typescript": "^5"
   }
 }

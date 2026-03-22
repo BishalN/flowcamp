@@ -1,4 +1,4 @@
-import { api } from "@rflowcamp/backend/convex/_generated/api";
+import { api } from "@flowcamp/backend/convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 

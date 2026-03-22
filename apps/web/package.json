@@ -13,9 +13,9 @@
   "dependencies": {
     "@convex-dev/better-auth": "catalog:",
     "@hookform/resolvers": "^5.1.1",
-    "@rflowcamp/backend": "workspace:*",
-    "@rflowcamp/env": "workspace:*",
-    "@rflowcamp/ui": "workspace:*",
+    "@flowcamp/backend": "workspace:*",
+    "@flowcamp/env": "workspace:*",
+    "@flowcamp/ui": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-form": "^1.28.0",
     "@tanstack/react-router": "^1.141.1",
@@ -30,7 +30,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@rflowcamp/config": "workspace:*",
+    "@flowcamp/config": "workspace:*",
     "@tanstack/react-router-devtools": "^1.141.1",
     "@tanstack/router-plugin": "^1.141.1",
     "@types/node": "^22.13.14",

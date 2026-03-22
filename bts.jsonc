@@ -13,7 +13,7 @@
   "$schema": "https://r2.better-t-stack.dev/schema.json",
   "version": "3.26.0",
   "createdAt": "2026-03-19T09:57:45.148Z",
-  "reproducibleCommand": "bun create better-t-stack@latest rflowcamp --frontend tanstack-router --backend convex --runtime none --database none --orm none --api none --auth better-auth --payments none --addons mcp oxlint turborepo --examples none --db-setup none --web-deploy none --server-deploy none --git --package-manager bun --install",
+  "reproducibleCommand": "bun create better-t-stack@latest flowcamp --frontend tanstack-router --backend convex --runtime none --database none --orm none --api none --auth better-auth --payments none --addons mcp oxlint turborepo --examples none --db-setup none --web-deploy none --server-deploy none --git --package-manager bun --install",
   "database": "none",
   "orm": "none",
   "backend": "convex",

@@ -13,7 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@rflowcamp/ui/*": ["../../packages/ui/src/*"]
+      "@flowcamp/ui/*": ["../../packages/ui/src/*"]
     }
   }
 }
