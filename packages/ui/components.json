@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "base-lyra",
+  "style": "base-nova",
   "rsc": false,
   "tsx": true,
   "tailwind": {
@@ -11,14 +11,15 @@
     "prefix": ""
   },
   "iconLibrary": "lucide",
+  "rtl": false,
   "aliases": {
     "components": "@rflowcamp/ui/components",
     "utils": "@rflowcamp/ui/lib/utils",
-    "hooks": "@rflowcamp/ui/hooks",
+    "ui": "@rflowcamp/ui/components",
     "lib": "@rflowcamp/ui/lib",
-    "ui": "@rflowcamp/ui/components"
+    "hooks": "@rflowcamp/ui/hooks"
   },
-  "menuColor": "default",
+  "menuColor": "default-translucent",
   "menuAccent": "subtle",
   "registries": {}
 }
