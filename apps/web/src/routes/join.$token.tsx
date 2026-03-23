@@ -83,7 +83,10 @@ function JoinPage() {
               <p className="text-center text-sm text-muted-foreground">
                 Sign in or create an account to accept this invite.
               </p>
-              <Button className="w-full rounded-full" render={<Link to="/" />}>
+              <Button
+                className="w-full rounded-full"
+                render={<Link to="/login" />}
+              >
                 Go to sign in
               </Button>
             </div>

@@ -2,17 +2,12 @@ import { Button } from "@flowcamp/ui/components/button";
 import { Input } from "@flowcamp/ui/components/input";
 import { Label } from "@flowcamp/ui/components/label";
 import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
 
 import { authClient } from "@/lib/auth-client";
 
 export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
-  const navigate = useNavigate({
-    from: "/",
-  });
-
   const form = useForm({
     defaultValues: {
       email: "",
@@ -28,9 +23,6 @@ export default function SignUpForm({ onSwitchToSignIn }: { onSwitchToSignIn: () 
         },
         {
           onSuccess: () => {
-            navigate({
-              to: "/dashboard",
-            });
             toast.success("Sign up successful");
           },
           onError: (error) => {

@@ -40,7 +40,7 @@ export default function UserMenu() {
             {initials(user?.name)}
           </AvatarFallback>
         </Avatar>
-        <span className="max-w-[9rem] truncate">{user?.name ?? "Account"}</span>
+        <span className="max-w-36 truncate">{user?.name ?? "Account"}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-card">
         <DropdownMenuGroup>
@@ -54,7 +54,7 @@ export default function UserMenu() {
                 fetchOptions: {
                   onSuccess: () => {
                     navigate({
-                      to: "/",
+                      to: "/login",
                     });
                   },
                 },

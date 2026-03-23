@@ -7,7 +7,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 import "../index.css";
 
-export interface RouterAppContext {}
+export interface RouterAppContext {
+  auth: {
+    isAuthenticated: boolean;
+    isLoading: boolean;
+  };
+}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootComponent,

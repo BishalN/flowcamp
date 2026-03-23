@@ -1,8 +1,10 @@
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { env } from "@flowcamp/env/web";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { useConvexAuth } from "convex/react";
 import { ConvexReactClient } from "convex/react";
 import { Agentation } from "agentation";
+import { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
 import { authClient } from "@/lib/auth-client";
@@ -16,14 +18,12 @@ const router = createRouter({
   defaultPreload: "intent",
   defaultPendingComponent: () => <Loader />,
   context: {
-    // TODO: add tanstack query client here or somewhere so we can use it in routes loader hook
-  },
-  Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
-    return (
-      <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-        {children}
-      </ConvexBetterAuthProvider>
-    );
+    // Placeholder values. We overwrite these dynamically in `InnerApp` and call `router.invalidate()`
+    // so route `beforeLoad` hooks see the latest auth state.
+    auth: {
+      isAuthenticated: false,
+      isLoading: true,
+    },
   },
 });
 
@@ -31,6 +31,25 @@ declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
+}
+
+function InnerApp() {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+
+  // TanStack Router's context isn't a "live" React context; we need to invalidate to recompute
+  // loaders/beforeLoad with updated context values.
+  useEffect(() => {
+    router.invalidate();
+  }, [isAuthenticated, isLoading]);
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        auth: { isAuthenticated, isLoading },
+      }}
+    />
+  );
 }
 
 const rootElement = document.getElementById("app");
@@ -43,7 +62,9 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <>
-      <RouterProvider router={router} />
+      <ConvexBetterAuthProvider client={convex} authClient={authClient}>
+        <InnerApp />
+      </ConvexBetterAuthProvider>
       {import.meta.env.DEV && <Agentation />}
     </>,
   );
