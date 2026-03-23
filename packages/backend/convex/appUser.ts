@@ -1,49 +1,31 @@
 import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
+import { authComponent } from "./auth";
 
 type Ctx = QueryCtx | MutationCtx;
 
-/**
- * App-owned `users` row for the current session, or `null` if unauthenticated or no row yet.
- * (Distinct from Better Auth `auth.ts` `getCurrentUser`, which returns the auth component user.)
- */
-export async function getAppUserOrNull(ctx: Ctx): Promise<Doc<"users"> | null> {
+export async function getAuthUserIdOrNull(ctx: Ctx): Promise<string | null> {
   const identity = await ctx.auth.getUserIdentity();
-  if (!identity) {
-    return null;
-  }
-  const user = await ctx.db
-    .query("users")
-    .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
-    .unique();
-  return user ?? null;
+  if (!identity) return null;
+  // safeGetAuthUser is a function that returns the auth user if it exists, otherwise it returns null, why have it though?? learn about it
+  const authUser = await authComponent.safeGetAuthUser(ctx);
+  return authUser ? String(authUser._id) : null;
 }
 
-export async function getAppUser(ctx: Ctx): Promise<Doc<"users">> {
-  const identity = await ctx.auth.getUserIdentity();
-  if (!identity) {
-    throw new Error("Not authenticated");
-  }
-  const user = await ctx.db
-    .query("users")
-    .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
-    .unique();
-  if (!user) {
-    throw new Error("App user not found");
-  }
-  return user;
+export async function requireAuthUserId(ctx: Ctx): Promise<string> {
+  const authUserId = await getAuthUserIdOrNull(ctx);
+  if (!authUserId) throw new Error("Not authenticated");
+  return authUserId;
 }
 
 export async function getCurrentWorkspaceMembership(
   ctx: Ctx,
 ): Promise<Doc<"workspaceMembers"> | null> {
-  const user = await getAppUserOrNull(ctx);
-  if (!user) {
-    return null;
-  }
+  const authUserId = await getAuthUserIdOrNull(ctx);
+  if (!authUserId) return null;
   return await ctx.db
     .query("workspaceMembers")
-    .withIndex("by_userId", (q) => q.eq("userId", user._id))
+    .withIndex("by_authUserId", (q) => q.eq("authUserId", authUserId))
     .first();
 }
 
@@ -51,11 +33,11 @@ export async function requireWorkspaceMember(
   ctx: Ctx,
   workspaceId: Id<"workspaces">,
 ): Promise<{ membership: Doc<"workspaceMembers">; workspace: Doc<"workspaces"> }> {
-  const user = await getAppUser(ctx);
+  const authUserId = await requireAuthUserId(ctx);
   const membership = await ctx.db
     .query("workspaceMembers")
-    .withIndex("by_workspaceId_and_userId", (q) =>
-      q.eq("workspaceId", workspaceId).eq("userId", user._id),
+    .withIndex("by_workspaceId_and_authUserId", (q) =>
+      q.eq("workspaceId", workspaceId).eq("authUserId", authUserId),
     )
     .unique();
   if (!membership) {

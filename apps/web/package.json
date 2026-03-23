@@ -15,7 +15,6 @@
     "@flowcamp/backend": "workspace:*",
     "@flowcamp/env": "workspace:*",
     "@flowcamp/ui": "workspace:*",
-    "@hookform/resolvers": "^5.1.1",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-form": "^1.28.0",
     "@tanstack/react-router": "^1.141.1",

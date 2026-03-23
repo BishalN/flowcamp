@@ -21,6 +21,7 @@ export const Route = createFileRoute("/_authed/dashboard")({
 });
 
 function DashboardPage() {
+  // Is there a way to call this in loader or some other hook? but that would not have websocket conn right?
   const home = useQuery(api.home.get);
   const [createOpen, setCreateOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -29,8 +30,8 @@ function DashboardPage() {
     return <DashboardSkeleton />;
   }
 
-  const primary = home.primaryProjects[0];
-  const restPrimary = home.primaryProjects.slice(1);
+  const primary = home.projects[0];
+  const restPrimary = home.projects.slice(1);
   const workspaceName = home.workspace.name;
   const userInitial = workspaceName.slice(0, 1).toUpperCase();
 
@@ -190,6 +191,7 @@ function EmptyProjectsHero({ onCreate }: { onCreate: () => void }) {
   );
 }
 
+// TODO: maybe large and small should be in same component ?
 function ProjectCardLarge({
   projectId,
   name,
@@ -223,7 +225,6 @@ function ProjectCardLarge({
     </Link>
   );
 }
-
 function ProjectCardSmall({
   projectId,
   name,

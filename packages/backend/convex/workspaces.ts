@@ -1,18 +1,15 @@
 import { v } from "convex/values";
 
-import { getAppUser } from "./appUser";
+import { getCurrentWorkspaceMembership, requireAuthUserId } from "./appUser";
 import { normalizeNameToSlugBase, pickUniqueSlug } from "../lib/slugs";
 import { mutation } from "./_generated/server";
 
-export const createFirstWorkspace = mutation({
+export const createWorkspace = mutation({
   args: { name: v.string() },
   returns: v.object({ workspaceId: v.id("workspaces") }),
   handler: async (ctx, args) => {
-    const user = await getAppUser(ctx);
-    const existingMembership = await ctx.db
-      .query("workspaceMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .first();
+    const authUserId = await requireAuthUserId(ctx);
+    const existingMembership = await getCurrentWorkspaceMembership(ctx);
     if (existingMembership) {
       throw new Error("Already in a workspace");
     }
@@ -20,6 +17,8 @@ export const createFirstWorkspace = mutation({
     if (trimmed.length === 0) {
       throw new Error("Name is required");
     }
+
+    // TODO: use some simpler approach here, maybe use a slug generator library
     const allWorkspaces = await ctx.db.query("workspaces").collect();
     const taken = new Set(allWorkspaces.map((w) => w.slug));
     const base = normalizeNameToSlugBase(trimmed);
@@ -28,13 +27,13 @@ export const createFirstWorkspace = mutation({
     const workspaceId = await ctx.db.insert("workspaces", {
       name: trimmed,
       slug,
-      ownerUserId: user._id,
+      ownerAuthUserId: authUserId,
       createdAt: now,
       updatedAt: now,
     });
     await ctx.db.insert("workspaceMembers", {
       workspaceId,
-      userId: user._id,
+      authUserId,
       role: "owner",
       joinedAt: now,
     });

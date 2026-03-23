@@ -3,7 +3,6 @@ import type { Id } from "@flowcamp/backend/convex/_generated/dataModel";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import {
-  CalendarClockIcon,
   FileTextIcon,
   ListTodoIcon,
   MessageSquareIcon,
@@ -58,7 +57,7 @@ const TOOL_LINKS: {
 function ProjectOverviewPage() {
   const { projectId } = Route.useParams();
   const id = projectId as Id<"projects">;
-  const shell = useQuery(api.projects.getShell, { projectId: id });
+  const shell = useQuery(api.projects.getProjectAccessContext, { projectId: id });
   const [inviteOpen, setInviteOpen] = useState(false);
 
   if (shell === undefined) {
@@ -134,32 +133,6 @@ function ProjectOverviewPage() {
           </Link>
         ))}
       </section>
-
-      {shell.deferredTools.length > 0 ? (
-        <section className="flex flex-col gap-3">
-          <h2 className="text-center text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Later
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {shell.deferredTools.map((t) => (
-              <Card
-                key={t.id}
-                className="border-dashed border-muted-foreground/25 bg-muted/20 opacity-80"
-              >
-                <CardHeader className="flex flex-row items-start gap-3">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                    <CalendarClockIcon className="size-5" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <CardTitle className="text-lg">{t.label}</CardTitle>
-                    <CardDescription>Planned — not available in this slice yet.</CardDescription>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </section>
-      ) : null}
     </div>
   );
 }

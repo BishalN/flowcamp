@@ -33,8 +33,7 @@ function reasonCopy(reason: string): string {
 
 function JoinPage() {
   const { token } = Route.useParams();
-  const now = useMemo(() => Date.now(), []);
-  const preview = useQuery(api.workspaceInvites.getPreview, { token, now });
+  const preview = useQuery(api.workspaceInvites.getInvitePreview, { token });
   const { isAuthenticated } = useConvexAuth();
   const accept = useMutation(api.workspaceInvites.accept);
   const navigate = useNavigate();

@@ -51,6 +51,7 @@ function LandingPage() {
   const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-up");
   const redirected = useRef(false);
 
+  // TODO: shift this to onLoad, in createFileRoute, avoid useEffect hook as much as possible
   useEffect(() => {
     if (!authLoading && isAuthenticated && !redirected.current) {
       redirected.current = true;

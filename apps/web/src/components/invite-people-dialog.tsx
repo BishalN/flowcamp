@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@flowcamp/ui/components/dialog";
 
+// TODO: use relative time, add dayjs relative time formatter
 function formatExpiry(ts: number) {
   return new Date(ts).toLocaleString();
 }
@@ -26,7 +27,7 @@ export function InvitePeopleDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const bootstrap = useQuery(api.users.getBootstrapState, open ? {} : "skip");
+  const bootstrap = useQuery(api.users.getOnboardingState, open ? {} : "skip");
   const isOwner = bootstrap?.membership?.role === "owner";
   const active = useQuery(
     api.workspaceInvites.getActiveLink,
@@ -83,6 +84,7 @@ export function InvitePeopleDialog({
             Share a link to invite teammates to this workspace. Links expire after a short period.
           </DialogDescription>
         </DialogHeader>
+        {/* TODO: why are we loading here ? simplify all this undefined stuff here */}
         {bootstrap === undefined ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
         ) : !isOwner ? (

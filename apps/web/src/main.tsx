@@ -15,7 +15,9 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPendingComponent: () => <Loader />,
-  context: {},
+  context: {
+    // TODO: add tanstack query client here or somewhere so we can use it in routes loader hook
+  },
   Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
     return (
       <ConvexBetterAuthProvider client={convex} authClient={authClient}>

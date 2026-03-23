@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authed/workspace-setup")({
 
 function WorkspaceSetupPage() {
   const navigate = useNavigate();
-  const createWorkspace = useMutation(api.workspaces.createFirstWorkspace);
+  const createWorkspace = useMutation(api.workspaces.createWorkspace);
   const [name, setName] = useState("");
   const [pending, setPending] = useState(false);
 

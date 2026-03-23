@@ -20,6 +20,7 @@ function ProjectsListPage() {
   const projects = useQuery(api.projects.list);
   const [createOpen, setCreateOpen] = useState(false);
 
+  // TODO: maybe have this in beforeLoad hook ?
   if (projects === undefined) {
     return <ProjectsListSkeleton />;
   }

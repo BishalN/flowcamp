@@ -13,9 +13,9 @@ import type * as auth from "../auth.js";
 import type * as healthCheck from "../healthCheck.js";
 import type * as home from "../home.js";
 import type * as http from "../http.js";
-import type * as privateData from "../privateData.js";
 import type * as projects from "../projects.js";
 import type * as users from "../users.js";
+import type * as validators from "../validators.js";
 import type * as workspaceInvites from "../workspaceInvites.js";
 import type * as workspaces from "../workspaces.js";
 
@@ -31,9 +31,9 @@ declare const fullApi: ApiFromModules<{
   healthCheck: typeof healthCheck;
   home: typeof home;
   http: typeof http;
-  privateData: typeof privateData;
   projects: typeof projects;
   users: typeof users;
+  validators: typeof validators;
   workspaceInvites: typeof workspaceInvites;
   workspaces: typeof workspaces;
 }>;

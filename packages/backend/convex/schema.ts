@@ -2,43 +2,29 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-  users: defineTable({
-    tokenIdentifier: v.string(),
-    authUserId: v.string(),
-    email: v.string(),
-    name: v.string(),
-    imageUrl: v.optional(v.string()),
-    createdAt: v.number(),
-    updatedAt: v.optional(v.number()),
-    lastSeenAt: v.optional(v.number()),
-  })
-    .index("by_tokenIdentifier", ["tokenIdentifier"])
-    .index("by_authUserId", ["authUserId"])
-    .index("by_email", ["email"]),
-
   workspaces: defineTable({
     name: v.string(),
     slug: v.string(),
-    ownerUserId: v.id("users"),
+    ownerAuthUserId: v.string(),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index("by_ownerUserId", ["ownerUserId"])
+    .index("by_ownerAuthUserId", ["ownerAuthUserId"])
     .index("by_slug", ["slug"]),
 
   workspaceMembers: defineTable({
     workspaceId: v.id("workspaces"),
-    userId: v.id("users"),
+    authUserId: v.string(),
     role: v.union(v.literal("owner"), v.literal("member")),
     joinedAt: v.number(),
   })
     .index("by_workspaceId", ["workspaceId"])
-    .index("by_userId", ["userId"])
-    .index("by_workspaceId_and_userId", ["workspaceId", "userId"]),
+    .index("by_authUserId", ["authUserId"])
+    .index("by_workspaceId_and_authUserId", ["workspaceId", "authUserId"]),
 
   workspaceInvites: defineTable({
     workspaceId: v.id("workspaces"),
-    createdByUserId: v.id("users"),
+    createdByAuthUserId: v.string(),
     tokenHash: v.string(),
     role: v.literal("member"),
     status: v.union(v.literal("active"), v.literal("revoked"), v.literal("consumed")),
@@ -46,7 +32,7 @@ export default defineSchema({
     createdAt: v.number(),
     revokedAt: v.optional(v.number()),
     consumedAt: v.optional(v.number()),
-    consumedByUserId: v.optional(v.id("users")),
+    consumedByAuthUserId: v.optional(v.string()),
   })
     .index("by_workspaceId", ["workspaceId"])
     .index("by_workspaceId_and_status", ["workspaceId", "status"])
@@ -57,7 +43,7 @@ export default defineSchema({
     name: v.string(),
     slug: v.string(),
     description: v.optional(v.string()),
-    createdByUserId: v.id("users"),
+    createdByAuthUserId: v.string(),
     createdAt: v.number(),
     updatedAt: v.number(),
     lastActivityAt: v.number(),

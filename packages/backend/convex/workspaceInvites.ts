@@ -1,6 +1,11 @@
 import { v } from "convex/values";
 
-import { getAppUser, getAppUserOrNull, requireWorkspaceOwner } from "./appUser";
+import {
+  getCurrentWorkspaceMembership,
+  getAuthUserIdOrNull,
+  requireAuthUserId,
+  requireWorkspaceOwner,
+} from "./appUser";
 import {
   evaluateInvite,
   generateInviteToken,
@@ -35,11 +40,8 @@ export const getActiveLink = query({
     }),
   ),
   handler: async (ctx) => {
-    const user = await getAppUser(ctx);
-    const membership = await ctx.db
-      .query("workspaceMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .first();
+    await requireAuthUserId(ctx);
+    const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
       throw new Error("Not in a workspace");
     }
@@ -62,10 +64,9 @@ export const getActiveLink = query({
   },
 });
 
-export const getPreview = query({
+export const getInvitePreview = query({
   args: {
     token: v.string(),
-    now: v.number(),
   },
   returns: v.object({
     workspaceName: v.union(v.string(), v.null()),
@@ -79,6 +80,7 @@ export const getPreview = query({
     reason: previewReasonValidator,
   }),
   handler: async (ctx, args) => {
+    const now = Date.now();
     const trimmed = args.token.trim();
     if (trimmed.length === 0) {
       return {
@@ -94,20 +96,17 @@ export const getPreview = query({
       .withIndex("by_tokenHash", (q) => q.eq("tokenHash", tokenHash))
       .unique();
 
-    const identity = await ctx.auth.getUserIdentity();
+    const authUserId = await getAuthUserIdOrNull(ctx);
     let callerHasAnyMembership = false;
     let callerInTargetWorkspace = false;
-    if (identity) {
-      const appUser = await getAppUserOrNull(ctx);
-      if (appUser) {
-        const m = await ctx.db
-          .query("workspaceMembers")
-          .withIndex("by_userId", (q) => q.eq("userId", appUser._id))
-          .first();
-        callerHasAnyMembership = m !== null;
-        if (m && invite) {
-          callerInTargetWorkspace = m.workspaceId === invite.workspaceId;
-        }
+    if (authUserId) {
+      const m = await ctx.db
+        .query("workspaceMembers")
+        .withIndex("by_authUserId", (q) => q.eq("authUserId", authUserId))
+        .first();
+      callerHasAnyMembership = m !== null;
+      if (m && invite) {
+        callerInTargetWorkspace = m.workspaceId === invite.workspaceId;
       }
     }
 
@@ -121,12 +120,11 @@ export const getPreview = query({
     }
 
     const workspace = await ctx.db.get(invite.workspaceId);
-    const inviter = await ctx.db.get(invite.createdByUserId);
 
     const evaluation = evaluateInvite({
       status: invite.status,
       expiresAt: invite.expiresAt,
-      now: args.now,
+      now,
     });
 
     const reason = getInvitePreviewReason({
@@ -136,6 +134,7 @@ export const getPreview = query({
       callerInTargetWorkspace,
     });
 
+    // TODO: simpler way to do this?
     let statusOut: "active" | "revoked" | "consumed" | "invalid";
     if (invite.status === "revoked") {
       statusOut = "revoked";
@@ -149,7 +148,7 @@ export const getPreview = query({
 
     return {
       workspaceName: workspace?.name ?? null,
-      inviterName: inviter?.name ?? null,
+      inviterName: null,
       status: statusOut,
       reason,
     };
@@ -164,11 +163,8 @@ export const generate = mutation({
     expiresAt: v.number(),
   }),
   handler: async (ctx) => {
-    const user = await getAppUser(ctx);
-    const membership = await ctx.db
-      .query("workspaceMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .first();
+    const authUserId = await requireAuthUserId(ctx);
+    const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
       throw new Error("Not in a workspace");
     }
@@ -194,7 +190,7 @@ export const generate = mutation({
     const expiresAt = now + INVITE_TTL_MS;
     const inviteId = await ctx.db.insert("workspaceInvites", {
       workspaceId,
-      createdByUserId: user._id,
+      createdByAuthUserId: authUserId,
       tokenHash,
       role: "member",
       status: "active",
@@ -213,11 +209,8 @@ export const revoke = mutation({
   args: { inviteId: v.id("workspaceInvites") },
   returns: v.object({ inviteId: v.id("workspaceInvites") }),
   handler: async (ctx, args) => {
-    const user = await getAppUser(ctx);
-    const membership = await ctx.db
-      .query("workspaceMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .first();
+    await requireAuthUserId(ctx);
+    const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
       throw new Error("Not in a workspace");
     }
@@ -249,7 +242,7 @@ export const accept = mutation({
   args: { token: v.string() },
   returns: v.object({ workspaceId: v.id("workspaces") }),
   handler: async (ctx, args) => {
-    const user = await getAppUser(ctx);
+    const authUserId = await requireAuthUserId(ctx);
     const trimmed = args.token.trim();
     if (trimmed.length === 0) {
       throw new Error("Invalid token");
@@ -272,7 +265,7 @@ export const accept = mutation({
 
     const existingMembership = await ctx.db
       .query("workspaceMembers")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
+      .withIndex("by_authUserId", (q) => q.eq("authUserId", authUserId))
       .first();
 
     const callerInTargetWorkspace =
@@ -304,7 +297,7 @@ export const accept = mutation({
 
     await ctx.db.insert("workspaceMembers", {
       workspaceId: invite.workspaceId,
-      userId: user._id,
+      authUserId,
       role: "member",
       joinedAt: now,
     });
@@ -312,7 +305,7 @@ export const accept = mutation({
     await ctx.db.patch(invite._id, {
       status: "consumed",
       consumedAt: now,
-      consumedByUserId: user._id,
+      consumedByAuthUserId: authUserId,
     });
 
     return { workspaceId: invite.workspaceId };
