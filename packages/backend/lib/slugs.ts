@@ -11,7 +11,7 @@ export function normalizeNameToSlugBase(name: string): string {
 }
 
 /**
- * Pick a slug that is not in `taken`, using deterministic `-2`, `-3`, … suffixes.
+ * Pick a slug that is not in `taken`, using deterministic `-2`, `-3`, … suffixes. Convex queries needs to be deterministic so we can't use a random number generator here.
  */
 export function pickUniqueSlug(base: string, taken: Set<string>): string {
   const safeBase = base.length > 0 ? base : "workspace";

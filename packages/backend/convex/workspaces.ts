@@ -18,7 +18,7 @@ export const createWorkspace = mutation({
       throw new Error("Name is required");
     }
 
-    // TODO: use some simpler approach here, maybe use a slug generator library
+    // TODO: use some simpler approach here, maybe use a slug generator library; So make this into action insted of query;
     const allWorkspaces = await ctx.db.query("workspaces").collect();
     const taken = new Set(allWorkspaces.map((w) => w.slug));
     const base = normalizeNameToSlugBase(trimmed);
