@@ -1,3 +1,5 @@
+import { ConvexError } from "convex/values";
+
 import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { authComponent } from "./auth";
@@ -14,7 +16,7 @@ export async function getAuthUserIdOrNull(ctx: Ctx): Promise<string | null> {
 
 export async function requireAuthUserId(ctx: Ctx): Promise<string> {
   const authUserId = await getAuthUserIdOrNull(ctx);
-  if (!authUserId) throw new Error("Not authenticated");
+  if (!authUserId) throw new ConvexError("Not authenticated");
   return authUserId;
 }
 
@@ -41,11 +43,11 @@ export async function requireWorkspaceMember(
     )
     .unique();
   if (!membership) {
-    throw new Error("Unauthorized");
+    throw new ConvexError("Unauthorized");
   }
   const workspace = await ctx.db.get(workspaceId);
   if (!workspace) {
-    throw new Error("Workspace not found");
+    throw new ConvexError("Workspace not found");
   }
   return { membership, workspace };
 }
@@ -56,7 +58,23 @@ export async function requireWorkspaceOwner(
 ): Promise<{ membership: Doc<"workspaceMembers">; workspace: Doc<"workspaces"> }> {
   const result = await requireWorkspaceMember(ctx, workspaceId);
   if (result.membership.role !== "owner") {
-    throw new Error("Unauthorized");
+    throw new ConvexError("Unauthorized");
   }
   return result;
+}
+
+export async function requireProjectMember(
+  ctx: Ctx,
+  projectId: Id<"projects">,
+): Promise<{
+  project: Doc<"projects">;
+  workspace: Doc<"workspaces">;
+  membership: Doc<"workspaceMembers">;
+}> {
+  const project = await ctx.db.get(projectId);
+  if (!project) {
+    throw new ConvexError("Project not found");
+  }
+  const { membership, workspace } = await requireWorkspaceMember(ctx, project.workspaceId);
+  return { project, workspace, membership };
 }

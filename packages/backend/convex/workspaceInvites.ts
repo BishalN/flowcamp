@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 
 import {
   getCurrentWorkspaceMembership,
@@ -43,7 +43,7 @@ export const getActiveLink = query({
     await requireAuthUserId(ctx);
     const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
-      throw new Error("Not in a workspace");
+      throw new ConvexError("Not in a workspace");
     }
     await requireWorkspaceOwner(ctx, membership.workspaceId);
     const active = await ctx.db
@@ -166,7 +166,7 @@ export const generate = mutation({
     const authUserId = await requireAuthUserId(ctx);
     const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
-      throw new Error("Not in a workspace");
+      throw new ConvexError("Not in a workspace");
     }
     await requireWorkspaceOwner(ctx, membership.workspaceId);
     const workspaceId = membership.workspaceId;
@@ -212,19 +212,19 @@ export const revoke = mutation({
     await requireAuthUserId(ctx);
     const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
-      throw new Error("Not in a workspace");
+      throw new ConvexError("Not in a workspace");
     }
     await requireWorkspaceOwner(ctx, membership.workspaceId);
 
     const invite = await ctx.db.get(args.inviteId);
     if (!invite) {
-      throw new Error("Invite not found");
+      throw new ConvexError("Invite not found");
     }
     if (invite.workspaceId !== membership.workspaceId) {
-      throw new Error("Unauthorized");
+      throw new ConvexError("Unauthorized");
     }
     if (invite.status === "consumed") {
-      throw new Error("Invite already consumed");
+      throw new ConvexError("Invite already consumed");
     }
     const now = Date.now();
     if (invite.status === "revoked") {
@@ -245,7 +245,7 @@ export const accept = mutation({
     const authUserId = await requireAuthUserId(ctx);
     const trimmed = args.token.trim();
     if (trimmed.length === 0) {
-      throw new Error("Invalid token");
+      throw new ConvexError("Invalid token");
     }
     const now = Date.now();
     const tokenHash = await hashInviteToken(trimmed);
@@ -254,7 +254,7 @@ export const accept = mutation({
       .withIndex("by_tokenHash", (q) => q.eq("tokenHash", tokenHash))
       .unique();
     if (!invite) {
-      throw new Error("Invalid or expired invite");
+      throw new ConvexError("Invalid or expired invite");
     }
 
     const evaluation = evaluateInvite({
@@ -279,19 +279,19 @@ export const accept = mutation({
 
     if (reason !== "ok") {
       if (reason === "expired") {
-        throw new Error("Invite expired");
+        throw new ConvexError("Invite expired");
       }
       if (reason === "revoked") {
-        throw new Error("Invite revoked");
+        throw new ConvexError("Invite revoked");
       }
       if (reason === "consumed") {
-        throw new Error("Invite already used");
+        throw new ConvexError("Invite already used");
       }
       if (reason === "already-member") {
-        throw new Error("Already a member of this workspace");
+        throw new ConvexError("Already a member of this workspace");
       }
       if (reason === "already-in-another-workspace") {
-        throw new Error("Already in another workspace");
+        throw new ConvexError("Already in another workspace");
       }
     }
 
