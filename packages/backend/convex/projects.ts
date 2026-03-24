@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 
 import { getCurrentWorkspaceMembership, requireAuthUserId, requireWorkspaceMember } from "./appUser";
 import { normalizeNameToSlugBase, pickUniqueSlug } from "../lib/slugs";
@@ -11,7 +11,7 @@ export const list = query({
   handler: async (ctx) => {
     const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
-      throw new Error("Not in a workspace");
+      throw new ConvexError("Not in a workspace");
     }
     const projects = await ctx.db
       .query("projects")
@@ -34,11 +34,11 @@ export const create = mutation({
     const authUserId = await requireAuthUserId(ctx);
     const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
-      throw new Error("Not in a workspace");
+      throw new ConvexError("Not in a workspace");
     }
     const trimmed = args.name.trim();
     if (trimmed.length === 0) {
-      throw new Error("Name is required");
+      throw new ConvexError("Name is required");
     }
     const workspaceId = membership.workspaceId;
     const existing = await ctx.db
@@ -73,7 +73,7 @@ export const getProjectAccessContext = query({
   handler: async (ctx, args) => {
     const project = await ctx.db.get(args.projectId);
     if (!project) {
-      throw new Error("Project not found");
+      throw new ConvexError("Project not found");
     }
     const { membership, workspace } = await requireWorkspaceMember(ctx, project.workspaceId);
     return {

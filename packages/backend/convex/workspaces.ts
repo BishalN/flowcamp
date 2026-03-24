@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 
 import { getCurrentWorkspaceMembership, requireAuthUserId } from "./appUser";
 import { normalizeNameToSlugBase, pickUniqueSlug } from "../lib/slugs";
@@ -11,11 +11,11 @@ export const createWorkspace = mutation({
     const authUserId = await requireAuthUserId(ctx);
     const existingMembership = await getCurrentWorkspaceMembership(ctx);
     if (existingMembership) {
-      throw new Error("Already in a workspace");
+      throw new ConvexError("Already in a workspace");
     }
     const trimmed = args.name.trim();
     if (trimmed.length === 0) {
-      throw new Error("Name is required");
+      throw new ConvexError("Name is required");
     }
 
     // TODO: use some simpler approach here, maybe use a slug generator library; So make this into action insted of query;

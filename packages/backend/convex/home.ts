@@ -1,4 +1,4 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 
 import { getCurrentWorkspaceMembership, requireWorkspaceMember } from "./appUser";
 import { query } from "./_generated/server";
@@ -13,7 +13,7 @@ export const get = query({
   handler: async (ctx) => {
     const membership = await getCurrentWorkspaceMembership(ctx);
     if (!membership) {
-      throw new Error("Not in a workspace");
+      throw new ConvexError("Not in a workspace");
     }
     const { workspace } = await requireWorkspaceMember(ctx, membership.workspaceId);
     const projects = await ctx.db

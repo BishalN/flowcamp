@@ -52,4 +52,49 @@ export default defineSchema({
     .index("by_workspaceId", ["workspaceId"])
     .index("by_workspaceId_and_lastActivityAt", ["workspaceId", "lastActivityAt"])
     .index("by_workspaceId_and_slug", ["workspaceId", "slug"]),
+
+  todoLists: defineTable({
+    workspaceId: v.id("workspaces"),
+    projectId: v.id("projects"),
+    name: v.string(),
+    createdByAuthUserId: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_projectId", ["projectId"]),
+
+  todos: defineTable({
+    workspaceId: v.id("workspaces"),
+    projectId: v.id("projects"),
+    listId: v.id("todoLists"),
+    title: v.string(),
+    descriptionMarkdown: v.optional(v.string()),
+    status: v.union(v.literal("open"), v.literal("completed")),
+    assigneeAuthUserId: v.optional(v.string()),
+    dueAt: v.optional(v.number()),
+    dueDateKey: v.optional(v.string()),
+    createdByAuthUserId: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    completedAt: v.optional(v.number()),
+  })
+    .index("by_projectId_and_status", ["projectId", "status"])
+    .index("by_projectId_and_assigneeAuthUserId_and_status", [
+      "projectId",
+      "assigneeAuthUserId",
+      "status",
+    ])
+    .index("by_assigneeAuthUserId_and_status", ["assigneeAuthUserId", "status"])
+    .index("by_assigneeAuthUserId_and_status_and_dueDateKey", [
+      "assigneeAuthUserId",
+      "status",
+      "dueDateKey",
+    ])
+    .index("by_listId", ["listId"]),
+
+  todoComments: defineTable({
+    todoId: v.id("todos"),
+    authorAuthUserId: v.string(),
+    bodyMarkdown: v.string(),
+    createdAt: v.number(),
+  }).index("by_todoId", ["todoId"]),
 });
