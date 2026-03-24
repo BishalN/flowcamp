@@ -1,30 +1,39 @@
 import { Toaster } from "@flowcamp/ui/components/sonner";
+import { TooltipProvider } from "@flowcamp/ui/components/tooltip";
 import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import "../index.css";
 
-export interface RouterAppContext {}
+export interface RouterAppContext {
+  auth: {
+    isAuthenticated: boolean;
+    isLoading: boolean;
+  };
+}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootComponent,
   head: () => ({
     meta: [
       {
-        title: "flowcamp",
+        title: "Flowcamp",
       },
       {
         name: "description",
-        content: "flowcamp is a web application",
+        content: "Calm, Basecamp-inspired teamwork — one workspace, clear projects.",
       },
     ],
     links: [
       {
         rel: "icon",
         href: "/favicon.ico",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap",
       },
     ],
   }),
@@ -36,15 +45,16 @@ function RootComponent() {
       <HeadContent />
       <ThemeProvider
         attribute="class"
-        defaultTheme="dark"
+        defaultTheme="light"
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Header />
-          <Outlet />
-        </div>
-        <Toaster richColors />
+        <TooltipProvider delay={0}>
+          <div className="flex min-h-svh flex-col bg-background">
+            <Outlet />
+          </div>
+          <Toaster richColors />
+        </TooltipProvider>
       </ThemeProvider>
       <TanStackRouterDevtools position="bottom-left" />
     </>

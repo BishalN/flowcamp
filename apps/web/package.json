@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@convex-dev/better-auth": "catalog:",
-    "@hookform/resolvers": "^5.1.1",
     "@flowcamp/backend": "workspace:*",
     "@flowcamp/env": "workspace:*",
     "@flowcamp/ui": "workspace:*",
@@ -37,6 +36,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "^4.3.4",
+    "agentation": "^2.3.3",
     "postcss": "^8.5.3",
     "tailwindcss": "catalog:",
     "typescript": "^5",

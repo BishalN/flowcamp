@@ -7,7 +7,10 @@
   "scripts": {
     "dev": "convex dev",
     "dev:setup": "convex dev --configure --until-success",
-    "deploy": "convex deploy"
+    "deploy": "convex deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc -p convex/tsconfig.json --noEmit"
   },
   "dependencies": {
     "@convex-dev/better-auth": "catalog:",
@@ -19,6 +22,7 @@
   "devDependencies": {
     "@flowcamp/config": "workspace:*",
     "@types/node": "^24.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
